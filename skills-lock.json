@@ -1,11 +1,29 @@
 {
   "version": 1,
   "skills": {
+    "business-analyst": {
+      "source": "aj-geddes/claude-code-bmad-skills",
+      "sourceType": "github",
+      "skillPath": "bmad-skills/business-analyst/SKILL.md",
+      "computedHash": "c87a25083afa27b23094152c213a74fbfbc0df2089ace8010b8f30876da99f8c"
+    },
+    "business-growth-skills": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "skillPath": "business-growth/skills/business-growth-skills/SKILL.md",
+      "computedHash": "62a9bfb2a2fff4e71ca279fb1c8fe87ff9794380ac06e5f347b3b79f5867c6d9"
+    },
     "game-design-document": {
       "source": "ityes22/game-design-document",
       "sourceType": "github",
       "skillPath": "SKILL.md",
       "computedHash": "5d1eb7ff799174d6ca8a2f132ed53c1372c31cfce3ad944aecaab71852f86256"
+    },
+    "monetization-strategy": {
+      "source": "eronred/aso-skills",
+      "sourceType": "github",
+      "skillPath": "skills/monetization-strategy/SKILL.md",
+      "computedHash": "a9f5120bbf509a747310f87fa1a85fc6156c61d5588478c51bc746cb6cc88554"
     }
   }
 }
