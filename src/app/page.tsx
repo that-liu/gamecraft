@@ -22,6 +22,8 @@ export default function Dashboard() {
   const [running, setRunning] = useState(false);
   const [currentAgent, setCurrentAgent] = useState('');
   const [doneAgents, setDoneAgents] = useState<Set<string>>(new Set());
+  const [agentOutputs, setAgentOutputs] = useState<Record<string,string>>({});
+  const [expandedAgent, setExpandedAgent] = useState<string|null>(null);
   const [preview, setPreview] = useState<Partial<GameProject>>({});
 
   useEffect(()=>{listProjects().then(setProjects);},[]);
@@ -35,15 +37,15 @@ export default function Dashboard() {
 
   const startGenerate = async () => {
     if(!idea.trim()||running) return;
-    setRunning(true); setDoneAgents(new Set()); setPreview({});
+    setRunning(true); setDoneAgents(new Set()); setAgentOutputs({}); setPreview({}); setExpandedAgent(null);
     try{
       const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idea:idea.trim()})});
       const reader=r.body?.getReader(),decoder=new TextDecoder();let buf='',results:Record<string,string>={};
       while(reader){const{value,done}=await reader.read();if(done)break;buf+=decoder.decode(value,{stream:true});const lines=buf.split('\n');buf=lines.pop()||'';
         for(const l of lines){if(!l.startsWith('data: '))continue;
           try{const m=JSON.parse(l.slice(6));
-            if(m.status==='running'){setCurrentAgent(m.agent);}
-            else if(m.status==='done'){setDoneAgents(prev=>new Set(prev).add(m.agent));results[m.agent]=m.output;}
+            if(m.status==='running'){setCurrentAgent(m.agent);setExpandedAgent(m.agent);}
+            else if(m.status==='done'){setDoneAgents(prev=>new Set(prev).add(m.agent));results[m.agent]=m.output;setAgentOutputs(prev=>({...prev,[m.agent]:m.output}));}
             else if(m.status==='complete'){
               setRunning(false);const gdd=results.gdd||'';const title=gdd.match(/《(.+?)》/)?.[1]||idea.slice(0,20);
               setPreview({title,genre:'',platform:'',description:gdd.split('\n')[0]?.slice(0,100)||'',notes:AGENTS.map(a=>`【${a.name}】\n${results[a.id]||''}`).join('\n\n')});
@@ -101,6 +103,23 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
+
+            {/* Live agent outputs */}
+            <div className="space-y-2">
+              {AGENTS.filter(a=>agentOutputs[a.id]).map(a=>(
+                <div key={a.id} className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+                  <button onClick={()=>setExpandedAgent(expandedAgent===a.id?null:a.id)} className="w-full flex items-center justify-between p-3 text-sm hover:bg-gray-50">
+                    <span className="flex items-center gap-2">{a.icon} <span className="font-medium">{a.name}</span> <span className="text-xs text-green-600">✅ 已完成</span></span>
+                    <span className="text-xs text-gray-400">{expandedAgent===a.id?'收起':'展开'} ({(agentOutputs[a.id]||'').length}字)</span>
+                  </button>
+                  {expandedAgent===a.id&&<div className="p-3 border-t border-gray-100 text-sm text-gray-700 max-h-60 overflow-y-auto whitespace-pre-wrap leading-relaxed bg-gray-50">{agentOutputs[a.id]}</div>}
+                </div>
+              ))}
+            </div>
+
+            {currentAgent && !agentOutputs[currentAgent] && (
+              <div className="text-sm text-purple-600 text-center">⏳ {AGENTS.find(a=>a.id===currentAgent)?.name} 正在创作中...</div>
+            )}
 
             {allDone && preview.title && (
               <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3 shadow-sm">
