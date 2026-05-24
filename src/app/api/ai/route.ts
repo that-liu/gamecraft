@@ -18,7 +18,7 @@ const AGENTS=[
 ];
 
 export async function POST(req:NextRequest){
-  let idea:string;try{const b=await req.json();idea=b.idea;}catch{return NextResponse.json({error:'Invalid JSON'},{status:400});}
+  let idea:string;try{const b=await req.json();idea=b.idea;}catch{return new Response(JSON.stringify({error:'Invalid JSON'}),{status:400,headers:{'Content-Type':'application/json'}});}
   const enc=new TextEncoder();
   const stream=new ReadableStream({async start(ctrl){
     const send=(d:Record<string,unknown>)=>ctrl.enqueue(enc.encode(`data:${JSON.stringify(d)}\n\n`));
