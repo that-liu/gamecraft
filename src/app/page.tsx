@@ -7,10 +7,9 @@ import Link from 'next/link';
 const GENRES = ['','RPG','动作','射击','策略','模拟','冒险','格斗','益智','恐怖','Roguelike','开放世界','魂类'];
 const PLATFORMS = ['','PC','主机','手游','网页','VR','跨平台'];
 const AGENTS = [
-  { id:'gdd', name:'策划文档', icon:'📋' },
-  { id:'mechanics', name:'游戏机制', icon:'⚙️' },
-  { id:'levels', name:'关卡设计', icon:'🗺️' },
-  { id:'characters', name:'角色设计', icon:'👤' },
+  { id:'gdd', name:'游戏策划', icon:'📋' },
+  { id:'mechanics', name:'机制设计', icon:'⚙️' },
+  { id:'content', name:'关卡+角色', icon:'🎭' },
   { id:'quests', name:'任务系统', icon:'📜' },
 ];
 
@@ -79,7 +78,7 @@ export default function Dashboard() {
       {/* 🚀 One-click Generate */}
       <div className="bg-gradient-to-br from-purple-50 via-white to-indigo-50 border border-purple-200 rounded-2xl p-6 mb-8 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 mb-2">🚀 一键生成游戏</h2>
-        <p className="text-sm text-gray-500 mb-4">输入游戏创意，5个 AI Agent 接力完成：策划→机制→关卡→角色→任务</p>
+        <p className="text-sm text-gray-500 mb-4">输入游戏创意，4个 AI Agent 接力完成：策划→机制→关卡+角色→任务</p>
 
         {!running && !allDone && (
           <div className="flex gap-3">
