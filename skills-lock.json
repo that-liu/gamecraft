@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "game-design-document": {
+      "source": "ityes22/game-design-document",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "5d1eb7ff799174d6ca8a2f132ed53c1372c31cfce3ad944aecaab71852f86256"
+    }
+  }
+}
